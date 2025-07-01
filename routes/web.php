@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\LocomotiveController;
+use App\Http\Controllers\WagonController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return redirect()->route('login');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -12,6 +14,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
+Route::resource('/rolling-stock/locomotives', LocomotiveController::class);
+Route::resource('/rolling-stock/wagons', WagonController::class);
+Route::get('/map', [\App\Http\Controllers\MapController::class, 'index'])->name('map.index');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
