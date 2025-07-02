@@ -40,7 +40,14 @@ export default function Create() {
         code: z.string().min(1, 'Code is required'),
         model: z.string().min(1, 'Model is required'),
         manufacturer: z.string().optional(),
-        built_year: z.string().date(),
+        built_year: z.string()
+            .regex(/^\d{4}$/, 'Year must be a 4-digit number') // Ensures the string has exactly 4 digits
+            .refine(year => {
+                const numericYear = parseInt(year, 10);
+                return numericYear > 1804 && numericYear < 2025; // Checks the range
+            }, {
+                message: 'Year must be between 1805 and 2024',
+            }),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -70,9 +77,6 @@ export default function Create() {
                         <div id='action-buttons' className='flex gap-2'>
                             <Button type="submit" form="locomotive-form">
                                 Create
-                            </Button>
-                            <Button>
-                                Create and Another
                             </Button>
                         </div>
                     </CardHeader>
