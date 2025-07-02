@@ -41,10 +41,10 @@ export default function Create() {
         model: z.string().min(1, 'Model is required'),
         manufacturer: z.string().optional(),
         built_year: z.string()
-            .regex(/^\d{4}$/, 'Year must be a 4-digit number') // Ensures the string has exactly 4 digits
+            .regex(/^\d{4}$/, 'Year must be a 4-digit number')
             .refine(year => {
                 const numericYear = parseInt(year, 10);
-                return numericYear > 1804 && numericYear < 2025; // Checks the range
+                return numericYear >= 1804 && numericYear <= 2025;
             }, {
                 message: 'Year must be between 1805 and 2024',
             }),
