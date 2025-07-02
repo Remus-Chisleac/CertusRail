@@ -46,7 +46,7 @@ export default function Create() {
                 const numericYear = parseInt(year, 10);
                 return numericYear >= 1804 && numericYear <= 2025;
             }, {
-                message: 'Year must be between 1805 and 2024',
+                message: 'Year must be between 1804 and 2025',
             }),
     });
 
