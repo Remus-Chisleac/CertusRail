@@ -8,7 +8,7 @@ import { usePoll } from '@inertiajs/react';
 
 const containerStyle = {
     width: '100%',
-    height: 'calc(100vh - 150px)', // Adjust height as needed
+    height: '100%', // Adjust height as needed
 };
 
 const defaultCenter = { lat: 46.784882, lng: 23.586945 };
@@ -55,7 +55,7 @@ const CustomTrainMarker = ({ train }: { train: Train }) => {
             <div style={{ transform: 'translate(-50%, -100%)' }}>
                 <div className="flex flex-col items-center">
                     {/* The label above the pin */}
-                    <div className="bg-white shadow-md mb-1 px-2 py-1 rounded-md font-semibold text-sm">
+                    <div className="bg-white shadow-md mb-1 px-2 py-1 rounded-md font-semibold text-black text-sm">
                         {train.name}
                     </div>
                     {/* The pin icon (SVG) */}
@@ -109,18 +109,16 @@ export default function RailMap({ trains, apiKey }: RailMapProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <div className="bg-white shadow-md p-4 rounded-lg">
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={defaultCenter}
-                    zoom={defaultZoom}
-                >
-                    {/* Map over the trains array and render a custom marker for each one */}
-                    {trains.map((train) => (
-                        <CustomTrainMarker key={train.id} train={train} />
-                    ))}
-                </GoogleMap>
-            </div>
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={defaultCenter}
+                zoom={defaultZoom}
+            >
+                {/* Map over the trains array and render a custom marker for each one */}
+                {trains.map((train) => (
+                    <CustomTrainMarker key={train.id} train={train} />
+                ))}
+            </GoogleMap>
         </AppLayout>
     );
 }
