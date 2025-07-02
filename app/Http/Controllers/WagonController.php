@@ -25,7 +25,7 @@ class WagonController extends Controller
         $data = $request->validate([
             'code'         => 'required|string|unique:wagons,code|max:255',
             'type'         => 'required|string|max:255',
-            'capacity'     => 'nullable|string|max:255',
+            'capacity'     => 'required|numeric|min:1',
         ]);
 
         Wagon::create($data);
@@ -42,9 +42,9 @@ class WagonController extends Controller
         return Inertia::render('wagons/show', ['wagon' => $wagonObj]);
     }
 
-    public function edit(Wagon $locomotive)
+    public function edit(Wagon $wagon)
     {
-        return Inertia::render('wagons/edit', compact('locomotive'));
+        return Inertia::render('wagons/edit', compact('wagon'));
     }
 
     public function update(Request $request, Wagon $wagon)
@@ -52,7 +52,7 @@ class WagonController extends Controller
         $data = $request->validate( [
             'code'         => 'required|string|unique:wagons,code,' . $wagon->id . '|max:255',
             'type'         => 'required|string|max:255',
-            'capacity'     => 'nullable|string|max:255',
+            'capacity'     => 'required|numeric|min:1',
         ]);
 
         $wagon->update($data);

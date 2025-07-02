@@ -7,11 +7,9 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { DataTable } from '@/components/data-table';
 
-
 interface IndexProps {
     wagons: Wagon[];
 }
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,7 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/wagons',
     },
 ];
-
 
 export default function Index({ wagons }: IndexProps) {
 

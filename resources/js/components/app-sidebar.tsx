@@ -3,7 +3,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Map, TrainFront, Wrench } from 'lucide-react';
+import { LayoutGrid, Map, TrainFront, Users, Wrench } from 'lucide-react';
 import AppLogo from './app-logo';
 // import { NavRollingStock } from './nav-rolling-stock';
 import { NavCompact, NavCompactProps } from './nav-compact';
@@ -29,9 +29,9 @@ const navCompactProps: NavCompactProps = {
         icon: TrainFront,
         isActive: false,
         items: [
-            { title: 'Trains', url: '/rolling-stock/trains' },
             { title: 'Locomotives', url: '/rolling-stock/locomotives' },
             { title: 'Wagons', url: '/rolling-stock/wagons' },
+            { title: 'Trains', url: '/trains' },
         ],
     },
     {
@@ -40,10 +40,20 @@ const navCompactProps: NavCompactProps = {
         icon: Wrench,
         isActive: false,
         items: [
-            { title: 'Schedules', url: '/maintenance/schedules' },
-            { title: 'Reports', url: '/maintenance/reports' },
+            { title: 'Schedules', url: '' },
+            { title: 'Reports', url: '' },
         ],
-    }]
+    },
+    {
+        title: 'Personal',
+        url: '/Personal',
+        icon: Users,
+        isActive: false,
+        items: [
+            { title: 'Schedules', url: '' },
+        ],
+    }
+]
 };
 
 // const footerNavItems: NavItem[] = [

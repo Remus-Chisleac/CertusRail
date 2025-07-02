@@ -42,7 +42,7 @@ export const WagonTableColumns: ColumnDef<Wagon>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <Link href={`locomotives/${row.original.id}`}>{row.original.id}</Link>,
+        cell: ({ row }) => <Link href={`wagons/${row.original.id}`}>{row.original.id}</Link>,
     },
     {
         id: 'code',
@@ -111,14 +111,14 @@ export const WagonTableColumns: ColumnDef<Wagon>[] = [
                 <div className="flex border-1 rounded-md w-fit h-fit">
                     <Button variant="ghost" >
                         <span className="sr-only">View</span>
-                        <Link href={`locomotives/${data.id}`}>
+                        <Link href={`wagons/${data.id}`}>
                             View
                         </Link>
                     </Button>
                     <SeparatorVertical height="5" />
                     <Button variant="ghost" >
                         <span className="sr-only">Edit</span>
-                        <Link href={`locomotives/${data.id}/edit`}>
+                        <Link href={`wagons/${data.id}/edit`}>
                             Edit
                         </Link>
                     </Button>

@@ -1,29 +1,48 @@
+import { z } from 'zod';
+import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Link } from '@inertiajs/react';
+import { Wagon } from './Wagon';
+import { Locomotive } from './Locomotive';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ColumnDef } from '@tanstack/react-table';
-import { z } from 'zod';
-import { Link } from "@inertiajs/react";
-import { SeparatorVertical } from "@/components/ui/separator-vertical";
 
-export const Wagon = z.object({
-    id: z.coerce.string(),
-    code: z.string(),
-    type: z.string(),
-    capacity: z.coerce.number().nullable(),
-    created_at: z.string().datetime(),
-    updated_at: z.string().datetime().nullable(),
+// Define the Zod schema for a Train, which is used for validation and type inference.
+export const Train = z.object({
+    id: z.number().int(),
+    name: z.string(),
+    latitude: z.number().optional(),
+    longitude: z.number().optional(),
+    // These counts are provided by the `withCount` method in the Laravel controller.
+    locomotives_count: z.number().int().optional(),
+    wagons_count: z.number().int().optional(),
+    // These are optional and would be used on a show/edit page if you load the full relations.
+    locomotives: z.array(Locomotive).optional(),
+    wagons: z.array(Wagon).optional(),
+
+    power_trains: z.array(z.object({
+        id: z.number().int(),
+        name: z.string(),
+        locomotives: z.array(Locomotive),
+    })).optional(),
+    train_sections: z.array(z.object({
+        id: z.number().int(),
+        name: z.string(),
+        wagons: z.array(Wagon),
+    })).optional(),
 });
-export type Wagon = z.infer<typeof Wagon>;
 
-export const WagonTableColumns: ColumnDef<Wagon>[] = [
+// Infer the TypeScript type from the Zod schema.
+export type Train = z.infer<typeof Train>;
+
+// Define the columns for the DataTable component on the Index page.
+export const TrainTableColumns: ColumnDef<Train>[] = [
     {
         id: 'id',
         accessorKey: 'id',
@@ -45,107 +64,93 @@ export const WagonTableColumns: ColumnDef<Wagon>[] = [
         cell: ({ row }) => <Link href={`locomotives/${row.original.id}`}>{row.original.id}</Link>,
     },
     {
-        id: 'code',
-        accessorKey: 'code',
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Code
-                    {column.getIsSorted() &&
+        accessorKey: "name",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Name
+                {column.getIsSorted() &&
                         (column.getIsSorted() === "asc" ?
                             (<ArrowUp className="ml-2 w-4 h-4" />) :
                             (<ArrowDown className="ml-2 w-4 h-4" />))
                     }
-                </Button>
-            )
-        },
+            </Button>
+        ),
+        cell: ({ row }) => (
+            <Link href={`/trains/${row.original.id}`} className="font-medium text-blue-600 hover:underline">
+                {row.original.name}
+            </Link>
+        )
     },
     {
-        id: 'type',
-        accessorKey: 'type',
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Type
-                    {column.getIsSorted() &&
+        accessorKey: "locomotives_count",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Locomotives
+                {column.getIsSorted() &&
                         (column.getIsSorted() === "asc" ?
                             (<ArrowUp className="ml-2 w-4 h-4" />) :
                             (<ArrowDown className="ml-2 w-4 h-4" />))
                     }
-                </Button>
-            )
-        },
+            </Button>
+        ),
+        cell: ({ row }) => (
+            <span className="text-center">
+                {row.original.locomotives_count ?? 0}
+            </span>
+        )
     },
     {
-        id: 'capacity',
-        accessorKey: 'capacity',
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Capacity
-                    {column.getIsSorted() &&
+        accessorKey: "wagons_count",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Wagons
+                {column.getIsSorted() &&
                         (column.getIsSorted() === "asc" ?
                             (<ArrowUp className="ml-2 w-4 h-4" />) :
                             (<ArrowDown className="ml-2 w-4 h-4" />))
                     }
-                </Button>
-            )
-        },
+            </Button>
+        ),
+        cell: ({ row }) => (
+            <span className="text-center">
+                {row.original.wagons_count ?? 0}
+            </span>
+        )
     },
     {
         id: "actions",
-        header: "Actions",
         cell: ({ row }) => {
-            const data = row.original
-
+            const train = row.original;
             return (
-                <div className="flex border-1 rounded-md w-fit h-fit">
-                    <Button variant="ghost" >
-                        <span className="sr-only">View</span>
-                        <Link href={`locomotives/${data.id}`}>
-                            View
-                        </Link>
-                    </Button>
-                    <SeparatorVertical height="5" />
-                    <Button variant="ghost" >
-                        <span className="sr-only">Edit</span>
-                        <Link href={`locomotives/${data.id}/edit`}>
-                            Edit
-                        </Link>
-                    </Button>
-                    <SeparatorVertical height="5" />
+                <div className="text-right">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost">
+                            <Button variant="ghost" className="p-0 w-8 h-8">
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal className="w-4 h-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(data.id)}
-                            >
-                                Copy Wagon ID
+                            <DropdownMenuItem asChild>
+                                <Link href={`/trains/${train.id}`}>View Details</Link>
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuLabel>View</DropdownMenuLabel>
-                            <DropdownMenuItem>Linked Train</DropdownMenuItem>
-                            <DropdownMenuItem>Maintenance Logs</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href={`/trains/${train.id}/edit`}>Edit Train</Link>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-
             )
-        }
+        },
     },
 ]
