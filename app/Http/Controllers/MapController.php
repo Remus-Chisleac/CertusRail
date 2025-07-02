@@ -9,7 +9,13 @@ class MapController extends Controller
 {
     public function index()
     {
-        $trains = Train::get();
-        return Inertia::render('map/RailMap', ['trains' => $trains, 'apiKey' => env('GOOGLE_MAPS_API_KEY')]);
+        $trains = Train::query()
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get(['id', 'name', 'latitude', 'longitude']);
+        return Inertia::render('map/RailMap', [
+            'trains' => $trains,
+            'apiKey' => env('GOOGLE_MAPS_API_KEY')
+        ]);
     }
 }

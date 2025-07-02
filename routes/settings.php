@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\TwoFactorController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,4 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance');
+
+    Route::get('settings/security', function () {
+        return Inertia::render('settings/security');
+    })->name('security.settings');
+
+    Route::post('two-factor-enable', [TwoFactorController::class, 'enable'])->name('two-factor.enable');
+    Route::post('two-factor-confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm');
+    Route::post('two-factor-disable', [TwoFactorController::class, 'disable'])->name('two-factor.disable');
 });

@@ -34,9 +34,9 @@ class LocomotiveController extends Controller
         return redirect()->route('locomotives.index');
     }
 
-    public function show(string $locomotive)
+    public function show(string $id)
     {
-        $locomotiveObj = Locomotive::findOrFail(id: $locomotive);
+        $locomotiveObj = Locomotive::findOrFail(id: $id);
         Log::info("Locomotive details accessed:", ['locomotive_id' => $locomotiveObj->id, 'code' => $locomotiveObj->code]);
         if (!$locomotiveObj) {
             return redirect()->route('locomotives.index')->with('error', 'Locomotive not found.');

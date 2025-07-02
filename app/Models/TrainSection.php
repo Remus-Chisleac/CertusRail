@@ -28,6 +28,6 @@ class TrainSection extends Model
             'train_section_wagon',
             'train_section_id',
             'wagon_id'
-        )->withPivot('position_order')->withTimestamps();
+        )->withTimestamps();
     }
 }

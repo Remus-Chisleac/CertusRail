@@ -6,6 +6,8 @@ import { BreadcrumbItem } from '@/types';
 import { Locomotive } from '@/models/Locomotive';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
+import { Separator } from '@/components/ui/separator';
+
 
 interface ShowProps {
     locomotive: Locomotive;
@@ -72,12 +74,16 @@ export default function Show({ locomotive }: ShowProps) {
                                     readOnly
                                 />
                             </div>
+                        </div>
 
+                        <Separator className="my-4" />
+
+                        <div className="gap-6 grid grid-cols-1 md:grid-cols-2">
                             <div className="space-y-1">
                                 <Label htmlFor="createdAt">Created At</Label>
                                 <Input
                                     id="createdAt"
-                                    value={locomotive.created_at.toString() ?? '—'}
+                                    value={locomotive.created_at ? new Date(locomotive.created_at).toLocaleString() : '—'}
                                     readOnly
                                 />
                             </div>
@@ -86,7 +92,7 @@ export default function Show({ locomotive }: ShowProps) {
                                 <Label htmlFor="updatedAt">Updated At</Label>
                                 <Input
                                     id="updatedAt"
-                                    value={locomotive.updated_at ?? '—'}
+                                    value={locomotive.updated_at ? new Date(locomotive.updated_at).toLocaleString() : '—'}
                                     readOnly
                                 />
                             </div>

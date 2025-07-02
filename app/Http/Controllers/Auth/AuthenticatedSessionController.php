@@ -31,9 +31,25 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = $request->user();
+
+        // --- 2FA LOGIC ---
+        // If the user has 2FA enabled, don't log them in yet.
+        if ($user && $user->google2fa_enabled) {
+            // Store the user's ID in the session and redirect to the challenge page.
+            session(['2fa_user_id' => $user->id]);
+
+            // Log out the partially authenticated user to prevent direct access
+            Auth::logout();
+
+            return redirect()->route('two-factor.show');
+        }
+        // --- END 2FA LOGIC ---
+
+        // If 2FA is not enabled, proceed with the normal login.
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard'));
     }
 
     /**

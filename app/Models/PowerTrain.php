@@ -28,6 +28,6 @@ class PowerTrain extends Model
             'power_train_locomotive',
             'power_train_id',
             'locomotive_id'
-        )->withPivot('position_order')->withTimestamps();
+        )->withTimestamps();
     }
 }
